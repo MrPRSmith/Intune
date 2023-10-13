@@ -17,17 +17,17 @@
 ##  2. If no local Admin accounts exist or will be created, you could leave the system without any Admin accounts.
 ##  3. The account specified in the LocalAdminAccounName variable will not be changed if it is found to exist.
 ##  4. If you choose to create a new Admin account, remember to change the password afterwards.
-##  5. Changes to a user account already logged on will take effect on their next log on.
 ##
 ##  WARNING: 
 ## 
 ##  !! This script could leave your Mac will no Admin accounts configured or with an easy to guess Admin account password !!
+##
 
 
 # Variables - Customise as you require
 
-LocalAdminAccounName="localadmin"       # This is the account name of the local Admin 
-LocalAdminAccounFullname="Local Admin"  # This is the full name to use for the new Admin account (if to be created)
+LocalAdminAccounName="ITAdmin"       # This is the account name to use for the local Admin 
+LocalAdminAccounFullname="IT Admin"  # This is the full name to use for the new Admin account (if one is to be created)
 ABMCheck=true                           # True = Only perform script actions if the Mac is ABM managed
 CreateAdmin=false                       # True = Create a local Admin account but only if LogOnly=False
 LogOnly=true                            # True = the script will not make any changes
@@ -36,7 +36,7 @@ LocalAdminAccounNameExists=false        # DO NOT CHANGE.
 
 ScriptName="Manage Local Admins"        # Name of the Script
 
-LogAndMetaDir="/Library/IntuneScripts"          # Log folder path
+LogAndMetaDir="/Library/Logs/IntuneScripts"          # Log folder path
 LogFile="$LogAndMetaDir/ManageLocalAdmins.log"  # Log name
 
 ## Check if the log directory has been created and start logging
@@ -58,6 +58,10 @@ echo "##########################################################################
 echo "# $(date) | Starting $ScriptName"
 echo "##############################################################################"
 echo ""
+
+# Get the devices Serial Number (make sure its in uppercase)
+SerialNumber=$(ioreg -l | grep "IOPlatformSerialNumber" | cut -d '"' -f 4 | tr '[:lower:]' '[:upper:]')
+echo "Serial Number: $SerialNumber"
 
 # Is this a ABM DEP device?
 if [ "$ABMCheck" = true ]; then
@@ -103,13 +107,31 @@ if [ "$CreateAdmin" = true ] && [ $LocalAdminAccounNameExists = false ]; then
         # Log Only - Make no Change
         echo "Report Only. Script would create a new local Admin account $LocalAdminAccounName ($LocalAdminAccounFullname)"
     else   
+        # When scripting the creation of a new Admin account, unless this is done interactively the new account will NOT have a Secure Token.
+        # https://support.apple.com/en-gb/guide/deployment/dep24dbdcf9e/web 
+        # 
+        # As per above link, if not granted a Secure Token at the time of creation, in macOS 11 or later, a local user logging in to a Mac computer is
+        # automatically granted a Secure Token during login if a bootstrap token is available from MDM. 
+        #
+        # Given the expectation is that the Mac executing this script is Intune enrolled via ABM/ADE and you will be logging in afterwards to
+        # change the password, this should not be an issue.
+        # 
+        # Also see:
+        # https://www.hexnode.com/blogs/mac-secure-token-everything-it-admins-should-know/
+        # https://krypted.com/mac-security/using-sysadminctl-macos/ 
+        # https://blog.kandji.io/secure-token-bootstrap-token-mac-security 
+
+        # Create an Admin account. It will be created WITHOUT a Secure Token
         echo "Creating a new local Admin account $LocalAdminAccounName ($LocalAdminAccounFullname)"
-        p=`system_profiler SPHardwareDataType | awk '/Serial/ {print $4}' | tr '[A-Z]' '[K-ZA-J]' | tr 0-9 4-90-3`
-        waitforSetupAssistant
-        echo "Adding $LocalAdminAccounName to hidden users list"
-        sudo defaults write /Library/Preferences/com.apple.loginwindow HiddenUsersList -array-add "$LocalAdminAccounName"
-        sudo sysadminctl -deleteUser "$LocalAdminAccounName" # Removes the existing admin account if it exists
-        sudo sysadminctl -adminUser "$LocalAdminAccounName" -adminPassword "$p" -addUser "$LocalAdminAccounName" -fullName "$LocalAdminAccounFullname" -password "$p" -admin
+        sudo sysadminctl -addUser "$LocalAdminAccounName" -fullName "$LocalAdminAccounFullname"  -password "$SerialNumber" -admin 
+                    
+        # Hide the Admin Account - see https://support.apple.com/en-gb/HT203998
+        echo "Adding $LocalAdminAccounName to the hidden users list"                
+        sudo dscl . create /Users/$LocalAdminAccounName IsHidden 1
+
+        echo "Note: A message in the log stating 'No clear text password or interactive option was specified"
+        echo "(adduser, change/reset password will not allow user to use FDE) !' is expected and can be ignored"
+        echo "You must login as this new account and change the password. Doing so will add a Secure Token to the account"        
     fi
 fi
 
