@@ -1,0 +1,1 @@
+Folder structure for the storage of screen shots and content for README files.
