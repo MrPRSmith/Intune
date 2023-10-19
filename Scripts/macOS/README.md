@@ -24,3 +24,4 @@ The table below details the script variables to provide understanding of how it 
 | `LogFile`                   | Name of the log file. **`Default value = "$LogAndMetaDir/ManageLocalAdmins.log"`** |
 
 
+![Example log output where the script is being executed and a local admin account is being created](/Scripts/Assets/ManageLocalAdmins/LogOutput1.png)
