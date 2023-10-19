@@ -15,7 +15,7 @@
 ##
 ##  1. This script can set all existing Admin accounts to be Standard user accounts. 
 ##  2. If no local Admin accounts exist or will be created, you could leave the system without any Admin accounts.
-##  3. The account specified in the LocalAdminAccounName variable will not be changed if it is found to exist.
+##  3. The account specified in the LocalAdminAccountName variable will not be changed if it is found to exist.
 ##  4. If you choose to create a new Admin account, remember to change the password afterwards.
 ##
 ##  WARNING: 
@@ -26,18 +26,18 @@
 
 # Variables - Customise as you require
 
-LocalAdminAccounName="ITAdmin"       # This is the account name to use for the local Admin 
-LocalAdminAccounFullname="IT Admin"  # This is the full name to use for the new Admin account (if one is to be created)
+LocalAdminAccountName="ITAdmin"       # This is the account name to use for the local Admin 
+LocalAdminAccountFullname="IT Admin"  # This is the full name to use for the new Admin account (if one is to be created)
 ABMCheck=true                           # True = Only perform script actions if the Mac is ABM managed
 CreateAdmin=false                       # True = Create a local Admin account but only if LogOnly=False
 LogOnly=true                            # True = the script will not make any changes
 
-LocalAdminAccounNameExists=false        # DO NOT CHANGE.
+LocalAdminAccountNameExists=false        # DO NOT CHANGE.
 
 ScriptName="Manage Local Admins"        # Name of the Script
 
-LogAndMetaDir="/Library/Logs/IntuneScripts"          # Log folder path
-LogFile="$LogAndMetaDir/ManageLocalAdmins.log"  # Log name
+LogAndMetaDir="/Library/Logs/IntuneScripts"         # Log folder path
+LogFile="$LogAndMetaDir/ManageLocalAdmins.log"      # Log name
 
 ## Check if the log directory has been created and start logging
 if [ -d $LogAndMetaDir ]; then
@@ -77,17 +77,17 @@ if [ "$ABMCheck" = true ]; then
 fi
 
 # Downgrade all accounts to being a Standard user
-echo "Changing all local accounts to be Standard users (with the exception of $LocalAdminAccounName)"
+echo "Changing all local accounts to be Standard users (with the exception of $LocalAdminAccountName)"
 while read UserAccount; do
-    if [ "$UserAccount" == "$LocalAdminAccounName" ]; then
+    if [ "$UserAccount" == "$LocalAdminAccountName" ]; then
         if [ $LogOnly = true ]; then
             # Log Only - Make no Change
-            echo "Report Only. Script would leave $LocalAdminAccounName account as Admin"
+            echo "Report Only. Script would leave $LocalAdminAccountName account as Admin"
         else
             # Make the change
-            echo "Leaving $LocalAdminAccounName account as Admin. No changes have been made to this account"
+            echo "Leaving $LocalAdminAccountName account as Admin. No changes have been made to this account"
         fi
-        LocalAdminAccounNameExists=true
+        LocalAdminAccountNameExists=true
     else        
         if [ $LogOnly = true ]; then
             # Log Only - Make no Change
@@ -102,10 +102,10 @@ while read UserAccount; do
 
 # Create a local Admin account if one does not already exist.
 # CAUTION REQUIRED. The default passsword will be the devices serial number. Log in and change accordingly afterwards if this feature is used.
-if [ "$CreateAdmin" = true ] && [ $LocalAdminAccounNameExists = false ]; then
+if [ "$CreateAdmin" = true ] && [ $LocalAdminAccountNameExists = false ]; then
     if [ $LogOnly = true ]; then
         # Log Only - Make no Change
-        echo "Report Only. Script would create a new local Admin account $LocalAdminAccounName ($LocalAdminAccounFullname)"
+        echo "Report Only. Script would create a new local Admin account $LocalAdminAccountName ($LocalAdminAccountFullname)"
     else   
         # When scripting the creation of a new Admin account, unless this is done interactively the new account will NOT have a Secure Token.
         # https://support.apple.com/en-gb/guide/deployment/dep24dbdcf9e/web 
@@ -122,12 +122,12 @@ if [ "$CreateAdmin" = true ] && [ $LocalAdminAccounNameExists = false ]; then
         # https://blog.kandji.io/secure-token-bootstrap-token-mac-security 
 
         # Create an Admin account. It will be created WITHOUT a Secure Token
-        echo "Creating a new local Admin account $LocalAdminAccounName ($LocalAdminAccounFullname)"
-        sudo sysadminctl -addUser "$LocalAdminAccounName" -fullName "$LocalAdminAccounFullname"  -password "$SerialNumber" -admin 
+        echo "Creating a new local Admin account $LocalAdminAccountName ($LocalAdminAccountFullname)"
+        sudo sysadminctl -addUser "$LocalAdminAccountName" -fullName "$LocalAdminAccountFullname"  -password "$SerialNumber" -admin 
                     
         # Hide the Admin Account - see https://support.apple.com/en-gb/HT203998
-        echo "Adding $LocalAdminAccounName to the hidden users list"                
-        sudo dscl . create /Users/$LocalAdminAccounName IsHidden 1
+        echo "Adding $LocalAdminAccountName to the hidden users list"                
+        sudo dscl . create /Users/$LocalAdminAccountName IsHidden 1
 
         echo "Note: A message in the log stating 'No clear text password or interactive option was specified"
         echo "(adduser, change/reset password will not allow user to use FDE) !' is expected and can be ignored"
@@ -135,8 +135,8 @@ if [ "$CreateAdmin" = true ] && [ $LocalAdminAccounNameExists = false ]; then
     fi
 fi
 
-if [ "$CreateAdmin" = true ] && [ $LocalAdminAccounNameExists = true ]; then
-    echo "Skipping the creation of $LocalAdminAccounName as it already exists. No changes have been made"
+if [ "$CreateAdmin" = true ] && [ $LocalAdminAccountNameExists = true ]; then
+    echo "Skipping the creation of $LocalAdminAccountName as it already exists. No changes have been made"
 fi  
 
 # END
