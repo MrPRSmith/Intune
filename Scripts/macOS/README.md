@@ -3,11 +3,11 @@
 
 Please refer to [Use shell scripts on macOS devices in Intune](https://learn.microsoft.com/en-us/mem/intune/apps/macos-shell-scripts) for details on how to deploy and use shell scripts.
 
-- Manage Local Admins
+- [Manage Local Admins](#manage-local-admins)
 
-## Manage Local Admins - [ManageLocalAdmins.sh](/Scripts/macOS/ManageLocalAdmins.sh)
+## Manage Local Admins
 
-This script will downgrade all user accounts to be Standard Users, removing local admin rights from all accounts.
+The script [ManageLocalAdmins.sh](/Scripts/macOS/ManageLocalAdmins.sh) will downgrade all user accounts to be Standard Users, removing local admin rights from all accounts.
 
 To ensure you maintain admin access to the macOS environment, be sure to exclude the name of your desired local admin account. If you do not have one this script can be used to create one for you, but you **must** ensure you change the password after the script has been run.
 
