@@ -32,7 +32,7 @@ ABMCheck=true                           # True = Only perform script actions if 
 CreateAdmin=false                       # True = Create a local Admin account but only if LogOnly=False
 LogOnly=true                            # True = the script will not make any changes
 
-LocalAdminAccountNameExists=false        # DO NOT CHANGE.
+LocalAdminAccountNameExists=false       # DO NOT CHANGE.
 
 ScriptName="Manage Local Admins"        # Name of the Script
 
