@@ -11,4 +11,3 @@ This repository contains the following CIS baselines exported from Intune in JSO
 
 
 ## Create an Intune configuration profile from JSON
-
