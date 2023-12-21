@@ -9,5 +9,3 @@ This repository contains the following CIS baselines exported from Intune in JSO
 - [Microsoft Office Enterprise](./Baselines/Microsoft%20Office%20Enterprise)
   - [v1.1.0](./CIS/Baselines/Microsoft%20Office%20Enterprise/1.1.0) - 18th August 2023
 
-
-## Create an Intune configuration profile from JSON

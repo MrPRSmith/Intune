@@ -1,0 +1,37 @@
+﻿{
+    "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationPolicies/$entity",
+    "createdDateTime": "2023-12-19T16:16:58.8229171Z",
+    "creationSource": null,
+    "description": "CIS Microsoft Intune for Windows 11 Benchmark\nv2.0.0 - 10-20-2023",
+    "lastModifiedDateTime": "2023-12-19T16:24:42.0266326Z",
+    "name": "Windows [CIS Intune for Windows 11 v2.0.0] - 19. Administrative Templates (User) (L2)",
+    "platforms": "windows10",
+    "priorityMetaData": null,
+    "roleScopeTagIds": [
+        "0"
+    ],
+    "settingCount": 1,
+    "technologies": "mdm",
+    "id": "7697b844-27cb-47ec-9492-334b8e256dba",
+    "templateReference": {
+        "templateId": "",
+        "templateFamily": "none",
+        "templateDisplayName": null,
+        "templateDisplayVersion": null
+    },
+    "settings": [
+        {
+            "id": "0",
+            "settingInstance": {
+                "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                "settingDefinitionId": "user_vendor_msft_policy_config_admx_helpandsupport_hpimplicitfeedback",
+                "settingInstanceTemplateReference": null,
+                "choiceSettingValue": {
+                    "settingValueTemplateReference": null,
+                    "value": "user_vendor_msft_policy_config_admx_helpandsupport_hpimplicitfeedback_1",
+                    "children": []
+                }
+            }
+        }
+    ]
+}

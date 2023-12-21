@@ -1,10 +1,10 @@
-{
+﻿{
     "@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/configurationPolicies/$entity",
-    "createdDateTime": "2023-11-06T15:48:30.2205684Z",
+    "createdDateTime": "2023-12-18T11:51:08.2043373Z",
     "creationSource": null,
     "description": "CIS Microsoft Intune for Windows 11 Benchmark\nv2.0.0 - 10-20-2023",
-    "lastModifiedDateTime": "2023-11-06T15:50:09.1812314Z",
-    "name": "Windows: [CIS Intune for Windows 11 v2.0.0] - 01. Account Policies (L1)",
+    "lastModifiedDateTime": "2023-12-20T11:53:51.3726174Z",
+    "name": "Windows [CIS Intune for Windows 11 v2.0.0] - 01. Account Policies (L1)",
     "platforms": "windows10",
     "priorityMetaData": null,
     "roleScopeTagIds": [
@@ -12,7 +12,7 @@
     ],
     "settingCount": 2,
     "technologies": "mdm",
-    "id": "6693b410-c57b-4e0c-aa36-e7549e720a4b",
+    "id": "0da3ee45-544c-4757-9b6e-eb21141c016f",
     "templateReference": {
         "templateId": "",
         "templateFamily": "none",
@@ -36,7 +36,7 @@
                             "settingInstanceTemplateReference": null,
                             "choiceSettingValue": {
                                 "settingValueTemplateReference": null,
-                                "value": "device_vendor_msft_policy_config_devicelock_alphanumericdevicepasswordrequired_2",
+                                "value": "device_vendor_msft_policy_config_devicelock_alphanumericdevicepasswordrequired_1",
                                 "children": []
                             }
                         },
@@ -58,6 +58,16 @@
                                 "@odata.type": "#microsoft.graph.deviceManagementConfigurationIntegerSettingValue",
                                 "settingValueTemplateReference": null,
                                 "value": 24
+                            }
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                            "settingDefinitionId": "device_vendor_msft_policy_config_devicelock_mindevicepasswordcomplexcharacters",
+                            "settingInstanceTemplateReference": null,
+                            "choiceSettingValue": {
+                                "settingValueTemplateReference": null,
+                                "value": "device_vendor_msft_policy_config_devicelock_mindevicepasswordcomplexcharacters_2",
+                                "children": []
                             }
                         },
                         {
